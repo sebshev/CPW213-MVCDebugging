@@ -24,6 +24,7 @@ namespace AspnetCoreWithBugs.Controllers
 
             return View(products);
         }
+
         [HttpGet]
         public IActionResult Create()
         {
@@ -36,6 +37,7 @@ namespace AspnetCoreWithBugs.Controllers
             if (ModelState.IsValid)
             {
                 await _context.AddAsync(product);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(product);
