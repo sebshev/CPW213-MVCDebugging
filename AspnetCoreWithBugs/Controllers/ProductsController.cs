@@ -24,6 +24,7 @@ namespace AspnetCoreWithBugs.Controllers
 
             return View(products);
         }
+
         [HttpGet]
         public IActionResult Create()
         {
@@ -36,6 +37,7 @@ namespace AspnetCoreWithBugs.Controllers
             if (ModelState.IsValid)
             {
                 await _context.AddAsync(product);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(product);
@@ -81,7 +83,8 @@ namespace AspnetCoreWithBugs.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var product = await _context.Product.FindAsync(id);
-            _context.Product.Remove(product);
+            _context.Entry(product).State = EntityState.Deleted;
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
